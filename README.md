@@ -1,3 +1,7 @@
+# Weather Station
+
+Web app for visualizing temperature and humidity data using ThingSpeak API.  Uses Angular (angular-seed project base) and D3.  Data comes from an Arudino Uno device with connected AM2302 sensor and WiFi shield for pushing data to ThingSpeak.
+
 # angular-seed — the seed for AngularJS apps
 
 This project is an application skeleton for a typical [AngularJS](http://angularjs.org/) web app.
