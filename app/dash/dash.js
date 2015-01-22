@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('myApp.dash', ['ngRoute'])
+angular.module('weather.dash', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/dash', {
     templateUrl: 'dash/dash.html',
-    controller: 'TableCtrl'
+    controller: 'DashCtrl'
   });
 }])
 
-.controller('TableCtrl', ['$scope', '$http', function($scope, $http) {
+.controller('DashCtrl', ['$scope', '$http', function($scope, $http) {
   $http.get('dash/testdata.json').success(function(data) {
     $scope.channel = data.channel;
     $scope.feeds = data.feeds;
