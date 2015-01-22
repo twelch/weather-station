@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>My AngularJS App</title>
+  <title>Home Weather Station</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
@@ -16,8 +16,9 @@
 </head>
 <body>
   <ul class="menu">
-    <li><a href="#/table">Table</a></li>
-    <li><a href="#/chart">Chart</a></li>
+    <li><a href="#/hour">Hour</a></li>
+    <li><a href="#/day">Day</a></li>
+    <li><a href="#/week">Week</a></li>
   </ul>
 
   <!--[if lt IE 7]>
@@ -31,9 +32,9 @@
   -->
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/d3/d3.min.js"></script>
   <script src="app.js"></script>
-  <script src="table/table.js"></script>
-  <script src="chart/chart.js"></script>
+  <script src="dash/dash.js"></script>
   <script src="components/version/version.js"></script>
   <script src="components/version/version-directive.js"></script>
   <script src="components/version/interpolate-filter.js"></script>
