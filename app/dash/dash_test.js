@@ -32,7 +32,14 @@ describe('weather.dash module', function() {
       expect(scope.feeds).toBeDefined();
       expect(scope.feeds[0].field1).toEqual('69');
       expect(scope.feeds[0].field2).toEqual('49');
-    });    
+    });
+
+    it('should set feedLoaded to true after data load', function() {
+      expect(scope.feedLoaded).toBeUndefined();
+      $httpBackend.flush();
+      expect(scope.feedLoaded).toBeDefined();
+      expect(scope.feedLoaded).toEqual(true);
+    })  
 
   });
 });
