@@ -9,12 +9,29 @@ angular.module('weather.dash', ['ngRoute'])
   });
 }])
 
-.controller('DashCtrl', ['$scope', '$http', function($scope, $http) {
-  $http.get('dash/testdata.json').success(function(data) {
-    $scope.channel = data.channel;
-    $scope.feeds = data.feeds;
-    $scope.feedLoaded = true;
-  });
+//feedService - manages data from Thingspeak
+.service('FeedService', ['$http', function($http) {
+  this.getFeed = function() {
+    return $http.get('dash/testdata.json')
+      .then(
+        //Success
+        function (response) {
+          return response.data;
+        },
+        //Fail
+        function (httpError) {
+           throw httpError.status + " : " + httpError.data;;           
+        });
+  }
+}])
+
+.controller('DashCtrl', ['$scope', 'FeedService', function($scope, FeedService) {
+  FeedService.getFeed()
+    .then(function(feedData) {
+      $scope.channel = feedData.channel;
+      $scope.feeds = feedData.feeds;
+      $scope.feedLoaded = true;
+    });    
 }])
 
 .directive('linearChart', function($window){

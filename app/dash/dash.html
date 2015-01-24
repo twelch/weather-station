@@ -2,15 +2,14 @@
 
 <div ng-if="feedLoaded">
   <div linear-chart chart-data="feeds"></div>
+  <table>
+    <tr>
+      <th>{{channel.field1}}</th>
+      <th>{{channel.field2}}</th>
+    </tr>
+    <tr ng-repeat="rec in feeds">
+      <td>{{rec.field1}}</td>
+      <td>{{rec.field2}}</td>
+    </tr>
+  </table>
 </div>
-
-<table>
-<tr>
-  <th>{{channel.field1}}</th>
-  <th>{{channel.field2}}</th>
-</tr>
-<tr ng-repeat="rec in feeds">
-  <td>{{rec.field1}}</td>
-  <td>{{rec.field2}}</td>
-</tr>
-</table>
