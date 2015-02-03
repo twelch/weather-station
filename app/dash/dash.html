@@ -1,15 +1,32 @@
-<h1>Home Weather Station</h1>
+<div class="container">
+  <h3>Weather Dashboard</h3>
 
-<div ng-if="feedLoaded">
-  <div linear-chart chart-data="feeds"></div>
-  <table>
-    <tr>
-      <th>{{channel.field1}}</th>
-      <th>{{channel.field2}}</th>
-    </tr>
-    <tr ng-repeat="rec in feeds">
-      <td>{{rec.field1}}</td>
-      <td>{{rec.field2}}</td>
-    </tr>
-  </table>
+  <div ng-if="feedLoaded">  
+    <div class="row-fluid">
+      <div class="span6">
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn">Min</button>
+          <button type="button" class="btn">Hour</button>
+          <button type="button" class="btn">Day</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-fluid">
+      <div class="span6">    
+        <div linear-chart chart-data="feeds"></div>
+      </div>
+    </div>
+
+    <table>
+      <tr>
+        <th>{{channel.field1}}</th>
+        <th>{{channel.field2}}</th>
+      </tr>
+      <tr ng-repeat="rec in feeds">
+        <td>{{rec.field1}}</td>
+        <td>{{rec.field2}}</td>
+      </tr>
+    </table>
+  </div>
 </div>

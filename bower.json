@@ -11,6 +11,7 @@
     "angular-loader": "1.2.x",
     "angular-mocks": "~1.2.x",
     "html5-boilerplate": "~4.3.0",
-    "d3": "3.5.x"
+    "d3": "3.5.x",
+    "flat-ui": "latest"
   }
 }
