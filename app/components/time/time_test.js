@@ -1,9 +1,9 @@
 'use strict';
 
-describe('myApp.version module', function() {
-  beforeEach(module('myApp.version'));
+describe('weather.time module', function() {
+  beforeEach(module('weather.time'));
 
-  describe('version service', function() {
+  describe('time service', function() {
     it('should return current version', inject(function(version) {
       expect(version).toEqual('0.1');
     }));

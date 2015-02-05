@@ -18,15 +18,19 @@
       </div>
     </div>
 
-    <table>
-      <tr>
-        <th>{{channel.field1}}</th>
-        <th>{{channel.field2}}</th>
-      </tr>
-      <tr ng-repeat="rec in feeds">
-        <td>{{rec.field1}}</td>
-        <td>{{rec.field2}}</td>
-      </tr>
-    </table>
+    <div class="row-fluid">
+      <table class="table feed-table">
+        <tr>
+          <th></th>
+          <th class='data-col'>{{channel.field1}}</th>
+          <th class='data-col'>{{channel.field2}}</th>
+        </tr>
+        <tr ng-repeat="rec in feeds">
+          <td>{{rec.created_date | longtime}}
+          <td class='data-col'>{{rec.field1}}</td>
+          <td class='data-col'>{{rec.field2}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>

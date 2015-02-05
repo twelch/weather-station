@@ -1,9 +1,9 @@
 'use strict';
 
-describe('myApp.version module', function() {
-  beforeEach(module('myApp.version'));
+describe('weather.time module', function() {
+  beforeEach(module('weather.time'));
 
-  describe('interpolate filter', function() {
+  describe('longtime filter', function() {
     beforeEach(module(function($provide) {
       $provide.value('version', 'TEST_VER');
     }));

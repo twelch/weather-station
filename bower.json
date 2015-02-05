@@ -13,6 +13,7 @@
     "html5-boilerplate": "~4.3.0",
     "d3": "3.5.x",
     "flat-ui": "latest",
-    "c3": "latest"
+    "c3": "latest",
+    "underscore": "latest"
   }
 }

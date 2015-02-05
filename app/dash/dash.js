@@ -9,13 +9,24 @@ angular.module('weather.dash', ['ngRoute'])
   });
 }])
 
-//feedService - manages data from Thingspeak
+/*
+ * feedService - manage feed data via Thingspeak API
+ */
 .service('FeedService', ['$http', function($http) {
   this.getFeed = function() {
     return $http.get('dash/testdata.json')
       .then(
         //Success
         function (response) {
+          //Enhance channel
+          response.data.channel.timeFormatStr = '%Y-%m-%dT%H:%M:%SZ';
+
+          //Postprocess feed events
+          //Add date objects
+          var timeFormat = d3.time.format(response.data.channel.timeFormatStr);
+          _.each(response.data.feeds, function(rec, index, list) {
+            rec.created_date = timeFormat.parse(rec.created_at);
+          })
           return response.data;
         },
         //Fail
@@ -39,21 +50,34 @@ angular.module('weather.dash', ['ngRoute'])
     restrict:'EA',
     template:"<div id='chart'></div>",
     link: function(scope, elem, attrs){
-
+      var chartTimeFormat = '%I:%M:%S %p';
       var chart = c3.generate({
-          bindto: "#chart",
-          data: {
-            x: 'x',
-            json: scope[attrs.chartData],
-            keys: {
-              value:['field1', 'field2'],
-              x: 'entry_id'
-            },
-            names: {
-              field1: 'Temperature',
-              field2: 'Humidity',
+        bindto: "#chart",
+        data: {
+          x: 'x',
+          xFormat: scope["channel"].timeFormatStr,
+          json: scope[attrs.chartData],
+          keys: {
+            value:['field1', 'field2'],
+            x: 'created_at'
+          },
+          names: {
+            field1: 'Temperature',
+            field2: 'Humidity',
+          }
+        },
+        axis: {
+          x: {
+            type: 'timeseries',
+            tick: {
+              format: chartTimeFormat,
+              fit: true,
+              culling: {
+                max: 8 // the number of tick texts will be adjusted to less than this value
+              }
             }
-          }          
+          }
+        }
       });
     }
   };

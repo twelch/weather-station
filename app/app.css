@@ -18,3 +18,11 @@
 div[linear-chart] {
   padding-top: 10px;
 }
+
+.feed-table {
+  margin-top: 40px;
+}
+
+.data-col {
+  text-align: center;
+}
