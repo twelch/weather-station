@@ -12,33 +12,35 @@ angular.module('weather.dash', ['ngRoute'])
 /*
  * feedService - manage feed data via Thingspeak API
  */
-.service('FeedService', ['$http', function($http) {
+.service('FeedService', ['$http', 'feedConfig', function($http, feedConfig) {
   this.getFeed = function() {
     return $http.get('dash/testdata.json')
       .then(
         //Success
         function (response) {
-          //Enhance channel
-          response.data.channel.timeFormatStr = '%Y-%m-%dT%H:%M:%SZ';
-
-          //Postprocess feed events
-          //Add date objects
-          var timeFormat = d3.time.format(response.data.channel.timeFormatStr);
-          _.each(response.data.feeds, function(rec, index, list) {
-            rec.created_date = timeFormat.parse(rec.created_at);
-          })
           return response.data;
         },
         //Fail
         function (httpError) {
            throw httpError.status + " : " + httpError.data;;           
         });
+  },
+  this.processFeed = function(rawFeedData) {
+    //Add date objects
+    var timeFormat = d3.time.format(feedConfig.feedTimeFormat);
+    rawFeedData.feeds = _.each(rawFeedData.feeds, function(rec, index, list) {
+      rec.created_date = timeFormat.parse(rec.created_at);
+    });
+    return rawFeedData;
   }
 }])
 
-.controller('DashCtrl', ['$scope', 'FeedService', function($scope, FeedService) {
+.controller('DashCtrl', ['$scope', 'FeedService', 'feedConfig', 'chartConfig', function($scope, FeedService, feedConfig, chartConfig) {
   FeedService.getFeed()
-    .then(function(feedData) {
+    .then(function(rawFeedData) {
+      var feedData = FeedService.processFeed(rawFeedData, feedConfig.feedTimeFormat);
+      $scope.chartConfig = chartConfig;
+      $scope.feedConfig = feedConfig;
       $scope.channel = feedData.channel;
       $scope.feeds = feedData.feeds;
       $scope.feedLoaded = true;
@@ -49,13 +51,16 @@ angular.module('weather.dash', ['ngRoute'])
   return{
     restrict:'EA',
     template:"<div id='chart'></div>",
-    link: function(scope, elem, attrs){
-      var chartTimeFormat = '%I:%M:%S %p';
+    link: function(scope, elem, attrs){      
       var chart = c3.generate({
         bindto: "#chart",
+        scope: {
+            feedConfig: "@",
+            chartConfig: "@"
+        },
         data: {
           x: 'x',
-          xFormat: scope["channel"].timeFormatStr,
+          xFormat: scope.feedConfig.feedTimeFormat,
           json: scope[attrs.chartData],
           keys: {
             value:['field1', 'field2'],
@@ -70,7 +75,7 @@ angular.module('weather.dash', ['ngRoute'])
           x: {
             type: 'timeseries',
             tick: {
-              format: chartTimeFormat,
+              format: scope.chartConfig.chartTimeFormat,
               fit: true,
               culling: {
                 max: 8 // the number of tick texts will be adjusted to less than this value
@@ -81,4 +86,11 @@ angular.module('weather.dash', ['ngRoute'])
       });
     }
   };
+})
+
+.constant('feedConfig', {
+  feedTimeFormat: '%Y-%m-%dT%H:%M:%SZ'
+})
+.constant('chartConfig', {
+  chartTimeFormat: '%I:%M:%S %p'
 });
