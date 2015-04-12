@@ -14,7 +14,7 @@ angular.module('weather.dash', ['ngRoute'])
  */
 .service('FeedService', ['$http', 'feedConfig', function($http, feedConfig) {
   this.getFeed = function() {
-    return $http.get('dash/testdata.json')
+    return $http.get('https://thingspeak.com/channels/22967/feeds.json?results=500')
       .then(
         //Success
         function (response) {
