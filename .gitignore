@@ -1,7 +1,7 @@
 logs/*
 !.gitkeep
 node_modules/
-bower_components/
+assets
 tmp
 .DS_Store
-.idea
+.sass-cache
