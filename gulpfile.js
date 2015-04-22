@@ -32,6 +32,8 @@ var config = {
     build: {
       root:   'build',
       lib:    'build/lib',
+      js:     'build/js',
+      cmp:    'build/components',
       css:    'build/css',
       fonts:  'build/fonts'
     }
@@ -55,10 +57,10 @@ config.globs.app.code = [
 //Glob of all html/js/css in build dir
 config.globs.build.code = [
   config.paths.build.root + '/*.html',
-  config.paths.build.root + '/**/*.js',
-  config.paths.build.root + '/**/*.html',
-  config.paths.build.root + '/**/*.css',
-  config.paths.build.lib + '/*'
+  config.paths.build.lib + '/**',
+  config.paths.build.js + '/**',
+  config.paths.build.cmp + '/**',
+  config.paths.build.css + '/**'
 ];
 
 //Glob of all scss in app dir
