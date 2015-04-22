@@ -1,17 +1,17 @@
 module.exports = function(config){
   config.set({
 
-    basePath : './',
+    basePath : './build',
 
     files : [
-      'app/assets/depend/angular/angular.js',
-      'app/assets/depend/angular-route/angular-route.js',
-      'app/assets/depend/angular-mocks/angular-mocks.js',
-      'app/assets/depend/d3/d3.js',
-      'app/assets/depend/c3/c3.js',
-      'app/assets/depend/underscore/underscore-min.js',
-      'app/components/**/*.js',
-      'app/dash/**/*.js'
+      'lib/angular/angular.js',
+      'lib/angular-route/angular-route.js',
+      'lib/angular-mocks/angular-mocks.js',
+      'lib/d3/d3.js',
+      'lib/c3/c3.js',
+      'lib/underscore/underscore-min.js',
+      'components/**/*.js',
+      'components/dash/**/*.js'
     ],
 
     autoWatch : true,

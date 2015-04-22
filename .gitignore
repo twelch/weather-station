@@ -5,3 +5,5 @@ assets
 tmp
 .DS_Store
 .sass-cache
+app/lib
+build

@@ -4,7 +4,7 @@ angular.module('weather.dash', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/dash', {
-    templateUrl: 'dash/dash.html',
+    templateUrl: 'components/dash/dash.html',
     controller: 'DashCtrl'
   });
 }])
