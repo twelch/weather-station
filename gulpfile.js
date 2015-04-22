@@ -25,8 +25,7 @@ var config = {
       lib:    'app/lib',
       js:     'app/js',
       cmp:    'app/components',
-      scss:   'app/scss',
-      fonts:  'app/fonts'
+      scss:   'app/scss'
     },
 
     build: {
@@ -34,8 +33,7 @@ var config = {
       lib:    'build/lib',
       js:     'build/js',
       cmp:    'build/components',
-      css:    'build/css',
-      fonts:  'build/fonts'
+      css:    'build/css'
     }
   },
 
@@ -72,7 +70,7 @@ config.globs.app.scss = [
 
 /******** Tasks ********/
 
-gulp.task('default', ['code', 'sass', 'fonts', 'watch']);
+gulp.task('default', ['code', 'sass', 'watch']);
 
 //Watch files and when they change, rerun build task
 gulp.task('watch', ['browserSync'], function() {
@@ -127,17 +125,6 @@ gulp.task('sass', function() {
     .pipe(browserSync.reload({stream:true}));
 });
 
-//Build fonts
-gulp.task('fonts', ['fonts:clean'], function(){
-  return gulp.src(config.paths.app.fonts + '/**/*')
-    .pipe(gulp.dest(config.paths.build.fonts + '/'));
-});
-
-//Clean fonts
-gulp.task('fonts:clean', function(next){
-  del(config.paths.build.fonts + '/**', next);
-});
-
 //Load browser synching
 gulp.task('browserSync', function() {
   var syncConfig = {
@@ -148,4 +135,4 @@ gulp.task('browserSync', function() {
   browserSync(syncConfig);
 });
 
-gulp.task('clean', ['fonts:clean', 'code:clean']);
+gulp.task('clean', ['code:clean']);
