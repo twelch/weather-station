@@ -4,17 +4,25 @@ Weather Station Task Runner
 This task runner is designed to separate source folder from build folder.  The source folder is where all of the resources for bootstrapping the app are located.  Running the default task will download dependencies, build and copy code to the build folder, and start the watch task with automatic browser reload.
 */
 
-var gulp          = require('gulp');
 var browserSync   = require('browser-sync');
 var del           = require('del')
+var gulp          = require('gulp');
 var autoprefixer  = require('gulp-autoprefixer');
 var bower         = require('gulp-bower');
 var filter        = require('gulp-filter');
+var gulpif        = require('gulp-if');
+//var minifyCss     = require('gulp-minify-css');
+var minifyHtml    = require('gulp-minify-html');
 var notify        = require('gulp-notify');
 var print         = require('gulp-print');
+var rm            = require('gulp-rimraf');
+var runSequence   = require('run-sequence');
 var sass          = require('gulp-sass');
 var sourcemaps    = require('gulp-sourcemaps');
-var useref        = require('gulp-useref');
+var uglify        = require('gulp-uglify');
+
+var CleanCSS      = require('clean-css');
+var map           = require('vinyl-map');
 
 /******** Config ********/
 
@@ -68,9 +76,27 @@ config.globs.app.scss = [
   config.paths.app.lib + '/fontawesome/scss',
 ];
 
-/******** Tasks ********/
+/******** Main tasks ********/
 
-gulp.task('default', ['code', 'sass', 'watch']);
+//Development
+gulp.task('dev', ['clean'], function() {
+  config.prod = false;
+  runSequence(['code', 'sass'], 'watch');
+});
+
+//Production
+gulp.task('prod', ['clean'], function() {
+  config.prod = true;
+  runSequence(['code', 'sass'], 'watch');
+});
+
+/******** Individual tasks ********/
+
+//Add karma tests
+
+gulp.task('clean', function(cb) {
+  return gulp.src(config.paths.build.root+'/*').pipe(rm());
+});
 
 //Watch files and when they change, rerun build task
 gulp.task('watch', ['browserSync'], function() {
@@ -79,50 +105,52 @@ gulp.task('watch', ['browserSync'], function() {
 });
 
 //Build html/js/css and sync to browser
-gulp.task('code', ['code:clean'], function(){
+gulp.task('code', function(){
   var jsFilter  = filter('**/*.js')
     , cssFilter = filter('**/*.css')
     , htmlFilter = filter(['*.html', '**/*.html']);
 
-  //var assets = useref.assets();
-
   return gulp.src(config.globs.app.code)
-    //.pipe(assets)
     .pipe(jsFilter)
-    //.pipe(uglify())
+//    .pipe(gulpif(config.prod, uglify()))
     .pipe(jsFilter.restore())
-    .pipe(cssFilter)
-    //.pipe(minifyCss())
-    .pipe(cssFilter.restore())
-    //.pipe(assets.restore())
-    //.pipe(useref())
+    //.pipe(cssFilter)
+    //.pipe(gulpif(config.prod, minifyCss({processImport: false})))
+    //.pipe(cssFilter.restore())
     .pipe(htmlFilter)
-    //.pipe(minifyHtml())
+    .pipe(gulpif(config.prod, minifyHtml()))
     .pipe(htmlFilter.restore())
     .pipe(gulp.dest(config.paths.build.root))
-    .pipe(browserSync.reload({stream:true}));
+    .pipe(gulpif(!config.prod, browserSync.reload({stream:true})))
+    .on('error', notify.onError(function (error) {          
+      return "Error: " + error.message;       
+    }));
 })
 
-//Clean html/js/css
-gulp.task('code:clean', function(next){
-  del(config.globs.build.code, next);
-});
-
-//Build scss and sync to browser
+//Build scss, add sourcemaps if dev, autoprefix if prod, and sync to browser
 gulp.task('sass', function() {
+  var minify = map(function (buff, filename) {
+    return new CleanCSS({
+      processImport: true,
+      debug: true
+    }).minify(buff.toString()).styles;
+  });
+
   return gulp.src(config.paths.app.scss + '/style.scss')
-    .pipe(sourcemaps.init())
-    .pipe(sass({includePaths: config.globs.app.scss})
-    .on("error", notify.onError(function (error) {          
-      return "Error: " + error.message;       
-    })))
-    .pipe(sourcemaps.write({includeContent: false}))
-    .pipe(sourcemaps.init({loadMaps: true}))
-    //Autoprefixer not working with sourcemaps, one or other for now
-    //.pipe(autoprefixer({ browsers: ['last 2 version'] }))
-    .pipe(sourcemaps.write())
+    .pipe(gulpif(!config.prod, sourcemaps.init()))
+    .pipe(sass({
+      includePaths: config.globs.app.scss,
+      outputStyle: config.prod ? 'compressed' : 'nested',
+      errLogToConsole: true
+    }))
+    .pipe(gulpif(!config.prod, sourcemaps.write({includeContent: false, sourceRoot: '.'})))
+    .pipe(gulpif(!config.prod, sourcemaps.init({loadMaps: true})))
+    .pipe(gulpif(!config.prod, sourcemaps.write()))
+    .pipe(autoprefixer({browsers: ["last 2 versions", "> 1%", "ie 8"], cascade: false}))
+    //Not working currently so use simple sass compress for now
+    //.pipe(gulpif(config.prod, minify))
     .pipe(gulp.dest(config.paths.build.css))
-    .pipe(browserSync.reload({stream:true}));
+    .pipe(gulpif(!config.prod, browserSync.reload({stream:true})))
 });
 
 //Load browser synching
@@ -134,5 +162,3 @@ gulp.task('browserSync', function() {
   };
   browserSync(syncConfig);
 });
-
-gulp.task('clean', ['code:clean']);

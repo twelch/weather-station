@@ -1,5 +1,11 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300|Megrim);
+@import url('/lib/html5-boilerplate/css/normalize.css');
+@import url('/lib/html5-boilerplate/css/main.css');
+@import url('/lib/c3/c3.css');
+
+// Override dependency settings
 $font-family-base: 'Lato', sans-serif;
+
 // Import bootstrap and fontawesome
 @import "bootstrap";
 @import "font-awesome";
