@@ -1,1 +1,1 @@
-[{"id":"54d13c74.ab2ec4","type":"inject","name":"timer","topic":"","payload":" ","payloadType":"string","repeat":"5","crontab":"","once":true,"x":90,"y":242,"z":"f052193a.0fade8","wires":[["d2da19aa.2d25e8"]]}]
+[{"id":"54d13c74.ab2ec4","type":"inject","name":"timer","topic":"","payload":" ","payloadType":"string","repeat":"60","crontab":"","once":true,"x":172,"y":74,"z":"f052193a.0fade8","wires":[["d2da19aa.2d25e8"]]}]
